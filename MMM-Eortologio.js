@@ -29,14 +29,24 @@ Module.register("MMM-Eortologio", {
 
     getDom() {
         const wrapper = document.createElement("div");
-        wrapper.className = "bright medium";
+        wrapper.className = "light small"; // less bright by default
 
         if (!this.names) {
             wrapper.innerHTML = "Φόρτωση εορτολογίου...";
-        } else {
+        } else if (this.names === "Σφάλμα σύνδεσης") {
             wrapper.innerHTML = `<strong>Σήμερα:</strong> ${this.names}`;
+        } else {
+            wrapper.innerHTML = `
+      <div style="font-size: medium; font-weight: normal;">
+        Σήμερα: ${this.names}
+      </div>
+      <div style="font-size: x-small; color: gray;">
+        (πηγή: eortologio.net)
+      </div>
+    `;
         }
 
         return wrapper;
     }
+
 });

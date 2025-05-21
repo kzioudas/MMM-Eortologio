@@ -13,16 +13,22 @@ module.exports = NodeHelper.create({
         try {
             const response = await fetch(url);
             const text = await response.text();
+
             parseString(text, (err, result) => {
-                if (!err) {
-                    const rawTitle = result.rss.channel[0].item[0].title[0];
-                    const match = rawTitle.match(/<a [^>]+>Σήμερα[^<]*<\/a><\/td>\s*<td[^>]*>\s*<a [^>]+>([^<]*)<\/a>/);
-                    const names = match ? match[1] : "Δεν βρέθηκαν ονόματα";
-                    this.sendSocketNotification("NAMEDAYS_RESULT", names);
-                } else {
-                    this.sendSocketNotification("NAMEDAYS_RESULT", "Σφάλμα ανάγνωσης XML");
+                if (err || !result?.rss?.channel?.[0]?.item?.[0]?.title?.[0]) {
+                    this.sendSocketNotification("NAMEDAYS_RESULT", "Σφάλμα σύνδεσης");
+                    return;
                 }
+
+                const rawTitle = result.rss.channel[0].item[0].title[0];
+
+                // Regex to extract Greek names from inside HTML
+                const match = rawTitle.match(/<td id="maintd">\s*<a[^>]*>([^<]*)<\/a>/);
+                const names = match ? match[1].trim() : "Δεν βρέθηκαν ονόματα";
+
+                this.sendSocketNotification("NAMEDAYS_RESULT", names);
             });
+
         } catch (error) {
             this.sendSocketNotification("NAMEDAYS_RESULT", "Σφάλμα σύνδεσης");
         }
