@@ -22,10 +22,12 @@ Module.register("MMM-Eortologio", {
 
     socketNotificationReceived(notification, payload) {
         if (notification === "NAMEDAYS_RESULT") {
+            console.log("[MMM-Eortologio] Received namedays from backend:", payload);
             this.names = payload;
             this.updateDom();
         }
-    },
+    }
+    ,
 
     getDom() {
         const wrapper = document.createElement("div");
@@ -48,5 +50,6 @@ Module.register("MMM-Eortologio", {
 
         return wrapper;
     }
+
 
 });
