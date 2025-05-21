@@ -31,8 +31,17 @@ module.exports = NodeHelper.create({
                 try {
                     const tdArray = titleNode.tr?.[0]?.td;
                     const nameNode = tdArray?.[1]?.a?.[0];
-                    if (nameNode) {
+
+                    if (typeof nameNode === "string") {
                         names = nameNode.trim();
+                    } else if (typeof nameNode === "object") {
+                        if (typeof nameNode._ === "string") {
+                            names = nameNode._.trim();
+                        } else if (Array.isArray(nameNode) && typeof nameNode[0] === "string") {
+                            names = nameNode[0].trim();
+                        } else {
+                            console.error("[MMM-Eortologio] Unrecognized nameNode structure:", nameNode);
+                        }
                     }
                 } catch (e) {
                     console.error("[MMM-Eortologio] Error extracting names:", e);
