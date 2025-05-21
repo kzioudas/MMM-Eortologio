@@ -1,0 +1,10 @@
+{
+  "name": "MMM-Eortologio",
+  "version": "1.0.0",
+  "description": "Displays today's Greek namedays from eortologio.net",
+  "main": "MMM-Eortologio.js",
+  "dependencies": {
+    "node-fetch": "^2.6.7",
+    "xml2js": "^0.4.23"
+  }
+}
